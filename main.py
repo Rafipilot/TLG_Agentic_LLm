@@ -1,32 +1,27 @@
 import requests
-import os
-from dotenv import load_dotenv
 import streamlit as st
 from PyPDF2 import PdfReader  # Use this for PDF parsing
 import json
 
-load_dotenv()
-
+# Secrets loaded from Streamlit secrets
 BASE_API_URL = "https://api.langflow.astra.datastax.com"
 LANGFLOW_ID = "ac1e5228-87cb-48c4-8bac-9a8e5a00c1dd"
 FLOW_ID = "316f48e5-bf3c-4b30-8e68-d708f3e3de8a"
-APPLICATION_TOKEN = os.environ.get("langflow_token")
-ENDPOINT = "vdev0"
+APPLICATION_TOKEN = st.secrets["langflow_token"]
+astra_db_id = st.secrets["ASTRA_DB_ID"]
+db_region = st.secrets["ASTRA_DB_REGION"]
+db_keyspace = st.secrets["ASTRA_DB_KEYSPACE"]
+astra_db_application_token = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
 
-
-
-import requests
-import os
-import json
 
 def insert_document(document: dict):
     """Insert a document into the Astra DB collection."""
-    base_url = f"https://{os.environ['ASTRA_DB_ID']}-{os.environ['ASTRA_DB_REGION']}.apps.astra.datastax.com"
-    endpoint = f"/api/rest/v2/namespaces/{os.environ['ASTRA_DB_KEYSPACE']}/collections/your_collection_name"
+    base_url = f"https://{astra_db_id}-{db_region}.apps.astra.datastax.com"
+    endpoint = f"/api/rest/v2/namespaces/{db_keyspace}/collections/your_collection_name"
     url = base_url + endpoint
 
     headers = {
-        "X-Cassandra-Token": os.environ['ASTRA_DB_APPLICATION_TOKEN'],
+        "X-Cassandra-Token": astra_db_application_token,
         "Content-Type": "application/json"
     }
 
@@ -40,7 +35,7 @@ def insert_document(document: dict):
 
 def run_flow(message: str) -> dict:
     """Send a message to Langflow API and return the response."""
-    api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/{ENDPOINT}"
+    api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/vdev0"
 
     payload = {
         "input_value": message,
