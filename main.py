@@ -60,8 +60,8 @@ if uploaded_file:
     retriever = create_retriever(documents)
     qa_chain = initialize_qa_chain(retriever)
 
-    query = st.text_input("Ask a question about your data:")
-    if query:
-        # Get the answer from the model
-        result = qa_chain.run(query)
-        st.write("Answer:", result)
+query = st.text_input("Ask a question about your data:")
+if query:
+    # Get the answer from the model
+    result = qa_chain.run(query)
+    st.write("Answer:", result)
