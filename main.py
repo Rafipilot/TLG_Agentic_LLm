@@ -9,14 +9,11 @@ from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from io import BytesIO
 import fitz  # PyMuPDF
-from langchain.schema import Document  # Import Document class
+from langchain.schema import Document  
 
 # Load environment variables
 dotenv.load_dotenv()
 openai.api_key = os.environ.get("OPENAI_KEY")
-
-# Streamlit UI
-st.title("TLGPT with Langchain")
 
 # Load and process the uploaded file
 def load_and_process_file(uploaded_file):
@@ -53,14 +50,16 @@ def initialize_qa_chain(retriever):
     )
     return qa_chain
 
-# Handle file upload and query input
+
+# streamlit frontend
+st.title("TLGPT with Langchain")
+
 uploaded_file = st.file_uploader("Upload a text file", type=["txt", "pdf"])
 if uploaded_file:
     documents = load_and_process_file(uploaded_file)
     retriever = create_retriever(documents)
     qa_chain = initialize_qa_chain(retriever)
 
-    # User input for question
     query = st.text_input("Ask a question about your data:")
     if query:
         # Get the answer from the model

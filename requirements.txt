@@ -4,3 +4,4 @@ openai
 langchain
 faiss-cpu
 pymupdf
+langchain-community
